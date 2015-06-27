@@ -2,13 +2,20 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/2.0.1/normalize.css">
 	<title>Team Generator</title>
 	<style>
 		body {
-			font: 1em 'PT Sans', Arial, Helvetica, sans-serif;
+			font: 1.3em 'PT Sans', Arial, Helvetica, sans-serif;
 			color: #333;
+			width: auto;
+		}
+
+		.page {
+			min-width: 400px;
+			margin: 0 auto;
 		}
 
 		.container {
@@ -109,6 +116,7 @@
 	</script>
 </head>
 <body>
+<div class="page">
 	<div class="container">
 		<h1>Генератор команд</h1>
 	</div>
@@ -135,5 +143,6 @@
 			<tbody id="teams-body"></tbody>
 		</table>
 	</div>
+</div>
 </body>
 </html>
