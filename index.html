@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/2.0.1/normalize.css">
+	<title>Team Generator</title>
+	<style>
+		body {
+			font: 1em 'PT Sans', Arial, Helvetica, sans-serif;
+			color: #333;
+		}
+
+		.container {
+			width: 90%;
+			margin: 20px auto;
+		}
+
+
+
+		h1, h2, h3 {
+			text-align: center;
+		}
+
+		select, table, button {
+			width: 100%;
+		}
+
+		.center-wrap {
+			width: 80%;
+			margin: 15px auto;
+		}
+
+		.center-wrap2 {
+			width: 50%;
+			margin: 15px auto;
+		}
+
+		table tr td {
+			text-align: center;
+		}
+
+	</style>
+	<script>
+		
+		var maxPlayers = 30;
+
+		window.onload = Initialize;
+
+		function Initialize() {
+			var playersOptions = document.querySelector("#players");
+			var playersOptionsHtml = '<option disabled selected>Сколько игроков?</option>';
+			for (var i = 2; i <= 30; i++ ) {
+				playersOptionsHtml += '<option value="' + i + '">' + i + '</option>';
+			}
+			playersOptions.innerHTML = playersOptionsHtml;
+			playersOptions.addEventListener('change', function(){
+				document.querySelector("#generate-btn").disabled = false;
+			});
+			document.querySelector("#generate-btn").addEventListener('click', LetsGenerate);
+		}
+
+		function RandomInteger(min, max) {
+			var rand = min + Math.random() * (max - min)
+			rand = Math.round(rand);
+  			return rand;
+		}
+
+		function LetsGenerate() {
+			var selectTag = document.querySelector("#players");
+			var numPlayers = parseInt(selectTag.options[selectTag.selectedIndex].value);
+			var teams = [[],[]];
+			for (var i = 1; i <= numPlayers; i++) {
+				var generatedPlayer = RandomInteger(1, numPlayers);
+				if (CheckExistingPlayer(teams, generatedPlayer)) {
+					i--;
+				} else {
+					teams[i%2].push(generatedPlayer);
+				}
+			}
+			DrawTeamPlayers(teams);
+		}
+
+		function CheckExistingPlayer(arr, digit) {
+			if (arr.hasOwnProperty(0) && arr.hasOwnProperty(1)) {
+				if (arr[0].indexOf(digit) >= 0 || arr[1].indexOf(digit) >= 0) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		function DrawTeamPlayers(teams) {
+			var tbodyHtml = "";
+			var maxLength = Math.max(teams[0].length, teams[1].length);
+			var first = RandomInteger(0,1);
+			var second = (first == 0) ? 1 : 0;
+			for (var i = 0; i < maxLength; i++) {
+				tbodyHtml += '<tr>';
+
+				tbodyHtml += (teams[first].hasOwnProperty(i)) ? '<td>' + teams[first][i] + '</td>' : '<td></td>';
+				tbodyHtml += (teams[second].hasOwnProperty(i)) ? '<td>' + teams[second][i] + '</td>': '<td></td>';
+
+				tbodyHtml += '</tr>';
+			}
+			document.querySelector("#teams-body").innerHTML = tbodyHtml;
+		}
+
+	</script>
+</head>
+<body>
+	<div class="container">
+		<h1>Генератор команд</h1>
+	</div>
+	<div class="container">
+		<label for="players"><h3>Выберите количество</h3></label>
+		<div class="center-wrap">
+			<select name="players" id="players"></select>
+		</div>
+		<div class="center-wrap2">
+			<button id="generate-btn" disabled>Сгенерировать</button>
+		</div>
+		
+		
+	</div>
+	<div class="container">
+		<h3>Команды</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Команда 1</th>
+					<th>Команда 2</th>
+				</tr>
+			</thead>
+			<tbody id="teams-body"></tbody>
+		</table>
+	</div>
+</body>
+</html>
